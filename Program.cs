@@ -1,19 +1,28 @@
-﻿Random random = new();
-int luck = random.Next(100);
-
-string[] text = ["You have much to", "Today is a day to", "Whatever work you do", "This is an ideal time to"];
-string[] good = ["look forward to.", "try new things!", "is likely to succeed.", "accomplish your dreams!"];
-string[] bad = ["fear.", "avoid major decisions.", "may have unexpected outcomes.", "re-evaluate your life."];
-string[] neutral = ["appreciate.", "enjoy time with friends.", "should align with your values.", "get in tune with nature."];
-
-Console.WriteLine("A fortune teller whispers the following words:");
-tellFortune(luck);
-
-void tellFortune(int luck)
+﻿string[,] corporate =
 {
-    string[] fortune = (luck > 75 ? good : (luck < 25 ? bad : neutral));
-    for (int i = 0; i < 4; i++)
+    {"Robert", "Bavin"}, {"Simon", "Bright"},
+    {"Kim", "Sinclair"}, {"Aashrita", "Kamath"},
+    {"Sarah", "Delucchi"}, {"Sinan", "Ali"}
+};
+
+string[,] external =
+{
+    {"Vinnie", "Ashton"}, {"Cody", "Dysart"},
+    {"Shay", "Lawrence"}, {"Daren", "Valdes"}
+};
+
+string corporateDomain = "contoso.com";
+string externalDomain = "hayworth.com";
+
+displayEmails(corporate, corporateDomain);
+displayEmails(external, externalDomain);
+
+void displayEmails(string[,] names, string domain)
+{
+    for (int i = 0; i < names.GetLength(0); i++)
     {
-        Console.Write($"{text[i]} {fortune[i]} ");
+        string firstName = names[i, 0].Substring(0, 2).ToLower();
+        string lastName = names[i, 1].ToLower();
+        Console.WriteLine(firstName + lastName + domain);
     }
 }
