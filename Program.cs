@@ -1,47 +1,61 @@
-﻿Random random = new();
+﻿using System;
 
-Console.WriteLine("Would you like to play? (Y/N)");
-if (ShouldPlay())
+string[] pettingZoo =
 {
-    PlayGame();
+    "alpacas", "capybaras", "chickens", "ducks", "emus", "geese",
+    "goats", "iguanas", "kangaroos", "lemurs", "llamas", "macaws",
+    "ostriches", "pigs", "ponies", "rabbits", "sheep", "tortoises",
+};
+
+PlanSchoolVisit("School A");
+PlanSchoolVisit("School B", 3);
+PlanSchoolVisit("School C", 2);
+
+void PlanSchoolVisit(string schoolName, int groups = 6)
+{
+    RandomiseAnimals();
+    string[,] group1 = AssignGroup(groups);
+    Console.WriteLine(schoolName);
+    PrintGroup(group1);
 }
 
-bool ShouldPlay()
+void RandomiseAnimals()
 {
-    string? readResult = Console.ReadLine();
-    if (readResult != null)
+    Random random = new();
+
+    for (int i = 0; i < pettingZoo.Length; i++)
     {
-        string userInput = readResult.ToLower().Trim();
-        return readResult == "y";
-    }
-    else
-    {
-        return false;
-    }
-}
+        int r = random.Next(i, pettingZoo.Length);
 
-void PlayGame()
-{
-    var play = true;
-
-    while (play)
-    {
-        var target = random.Next(1, 5);
-        var roll = random.Next(1, 6);
-
-        Console.WriteLine($"Roll a number greater than {target} to win!");
-        Console.WriteLine($"You rolled a {roll}");
-        Console.WriteLine(WinOrLose(target, roll));
-        Console.WriteLine("\nPlay again? (Y/N)");
-
-        play = ShouldPlay();
+        (pettingZoo[i], pettingZoo[r]) = (pettingZoo[r], pettingZoo[i]);
     }
 }
 
-string WinOrLose(int target, int roll)
+string[,] AssignGroup(int groups = 6)
 {
-    if (roll > target)
-        return "You win!";
-    else
-        return "You lose!";
+    string[,] result = new string[groups, pettingZoo.Length / groups];
+    int start = 0;
+
+    for (int i = 0; i < groups; i++)
+    {
+        for (int j = 0; j < result.GetLength(1); j++)
+        {
+            result[i, j] = pettingZoo[start++];
+        }
+    }
+
+    return result;
+}
+
+void PrintGroup(string[,] groups)
+{
+    for (int i = 0; i < groups.GetLength(0); i++)
+    {
+        Console.Write($"Group {i + 1}: ");
+        for (int j = 0; j < groups.GetLength(1); j++)
+        {
+            Console.Write($"{groups[i, j]}  ");
+        }
+        Console.WriteLine();
+    }
 }
