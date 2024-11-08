@@ -1,28 +1,47 @@
-﻿string[,] corporate =
+﻿Random random = new();
+
+Console.WriteLine("Would you like to play? (Y/N)");
+if (ShouldPlay())
 {
-    {"Robert", "Bavin"}, {"Simon", "Bright"},
-    {"Kim", "Sinclair"}, {"Aashrita", "Kamath"},
-    {"Sarah", "Delucchi"}, {"Sinan", "Ali"}
-};
+    PlayGame();
+}
 
-string[,] external =
+bool ShouldPlay()
 {
-    {"Vinnie", "Ashton"}, {"Cody", "Dysart"},
-    {"Shay", "Lawrence"}, {"Daren", "Valdes"}
-};
-
-string corporateDomain = "contoso.com";
-string externalDomain = "hayworth.com";
-
-displayEmails(corporate, corporateDomain);
-displayEmails(external, externalDomain);
-
-void displayEmails(string[,] names, string domain)
-{
-    for (int i = 0; i < names.GetLength(0); i++)
+    string? readResult = Console.ReadLine();
+    if (readResult != null)
     {
-        string firstName = names[i, 0].Substring(0, 2).ToLower();
-        string lastName = names[i, 1].ToLower();
-        Console.WriteLine(firstName + lastName + domain);
+        string userInput = readResult.ToLower().Trim();
+        return readResult == "y";
     }
+    else
+    {
+        return false;
+    }
+}
+
+void PlayGame()
+{
+    var play = true;
+
+    while (play)
+    {
+        var target = random.Next(1, 5);
+        var roll = random.Next(1, 6);
+
+        Console.WriteLine($"Roll a number greater than {target} to win!");
+        Console.WriteLine($"You rolled a {roll}");
+        Console.WriteLine(WinOrLose(target, roll));
+        Console.WriteLine("\nPlay again? (Y/N)");
+
+        play = ShouldPlay();
+    }
+}
+
+string WinOrLose(int target, int roll)
+{
+    if (roll > target)
+        return "You win!";
+    else
+        return "You lose!";
 }
