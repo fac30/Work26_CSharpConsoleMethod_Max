@@ -28,11 +28,22 @@ InitializeGame();
 while (!shouldExit)
 {
     shouldExit = TerminalResized();
-    Move(false);
-    if (CheckFood())
+    if (!shouldExit)
     {
-        ChangePlayer();
-        ShowFood();
+        if (CheckPlayerFreeze())
+        {
+            FreezePlayer();
+        }
+        else
+        {
+            int speed = CheckPlayerSpeed() ? 3 : 1;
+            Move(false, speed);
+            if (CheckFood())
+            {
+                ChangePlayer();
+                ShowFood();
+            }
+        }
     }
 }
 if (shouldExit)
@@ -76,6 +87,16 @@ bool CheckFood()
     return playerY == foodY && playerX == foodX;
 }
 
+bool CheckPlayerFreeze()
+{
+    return player == states[2];
+}
+
+bool CheckPlayerSpeed()
+{
+    return player == states[1];
+}
+
 // Temporarily stops the player from moving
 void FreezePlayer()
 {
@@ -84,7 +105,7 @@ void FreezePlayer()
 }
 
 // Reads directional input from the Console and moves the player
-void Move(bool nonDirectionalKeyExit)
+void Move(bool nonDirectionalKeyExit, int speed)
 {
     int lastX = playerX;
     int lastY = playerY;
@@ -100,16 +121,16 @@ void Move(bool nonDirectionalKeyExit)
         switch (input)
         {
             case ConsoleKey.UpArrow:
-                playerY--;
+                playerY++;
                 break;
             case ConsoleKey.DownArrow:
                 playerY++;
                 break;
             case ConsoleKey.LeftArrow:
-                playerX--;
+                playerX -= speed;
                 break;
             case ConsoleKey.RightArrow:
-                playerX++;
+                playerX += speed;
                 break;
             case ConsoleKey.Escape:
                 shouldExit = true;
