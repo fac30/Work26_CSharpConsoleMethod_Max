@@ -29,6 +29,11 @@ while (!shouldExit)
 {
     shouldExit = TerminalResized();
     Move(false);
+    if (CheckFood())
+    {
+        ChangePlayer();
+        ShowFood();
+    }
 }
 if (shouldExit)
 {
@@ -64,6 +69,11 @@ void ChangePlayer()
     player = states[food];
     Console.SetCursorPosition(playerX, playerY);
     Console.Write(player);
+}
+
+bool CheckFood()
+{
+    return playerY == foodY && playerX == foodX;
 }
 
 // Temporarily stops the player from moving
